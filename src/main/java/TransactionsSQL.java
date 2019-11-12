@@ -29,4 +29,34 @@ public class TransactionsSQL {
             }
         }
     }
+
+    public static void transactions(Connection conn, String query) {
+        if(query == null)
+            return;
+
+        try {
+            conn.setAutoCommit(Boolean.FALSE);
+            Statement s = conn.createStatement();
+            System.out.println(query);
+            int rowInsert = s.executeUpdate(query);
+            if (rowInsert > 0) {
+                System.out.println("Success!");
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.setAutoCommit(Boolean.TRUE);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

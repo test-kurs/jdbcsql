@@ -16,6 +16,7 @@ public class Main {
     8. Napisz testy jednostkowe dla swojej aplikacji oraz wrzuć na gita
     9. Wykorzystaj projekt, w którym łączyliśmy się z API i pobieraliśmy dane o pracownikach
     i zrób metodę, która doda ich do bazy danych a brakujące dane wygeneruje lub będzie ustawiać domyślną wartość
+
     */
     public static void main(String[] args) {
         Connection connection = new SQLConnection().getConnection();
@@ -23,14 +24,15 @@ public class Main {
 
         String tableName = "Employees";
 
-        List<String> columnNames = new ArrayList<>();
-        columnNames.add("FirstName");
-        columnNames.add("LastName");
-
         Map<String, String> updateValues = new HashMap<>();
-        updateValues.put("LastName", "Jasiek");
-        updateValues.put("Age", "15");
+        updateValues.put("LastName","Jasiek");
+        updateValues.put("Age","15");
 
-        crudStatementSQL.updateSQLbyJDBC(updateValues, tableName, "where id = 2");
+        TransactionsSQL.transactions(connection, crudStatementSQL.updateSQLbyJDBC(updateValues, tableName, "where LastName = 'koro'"));
+        TransactionsSQL.transactions(connection, crudStatementSQL.updateSQLbyJDBC(updateValues, tableName, "where LastName = 'asd' or 1 = 1"));
+
+        TransactionsSQL.transactions(connection, crudStatementSQL.deleteSQLbyID(tableName, "id","2"));
+
+
     }
 }
